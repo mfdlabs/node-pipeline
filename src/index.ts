@@ -20,8 +20,12 @@
 	Written by: JavaScript Squad
 */
 
+import ExecutionPlan from './pipeline/execution_plan';
 import PipelineHandler from './pipeline/pipeline_handler';
 import ExecutionContext from './pipeline/execution_context';
-import ExecutionPlan from './pipeline/execution_plan';
 
-export { PipelineHandler, ExecutionContext, ExecutionPlan };
+import IExecutionPlan from './pipeline/interfaces/execution_plan';
+import IPipelineHandler from './pipeline/interfaces/pipeline_handler';
+import IExecutionContext from './pipeline/interfaces/execution_context';
+
+export { PipelineHandler, ExecutionContext, ExecutionPlan, IExecutionPlan, IPipelineHandler, IExecutionContext };
