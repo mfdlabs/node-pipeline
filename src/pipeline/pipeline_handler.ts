@@ -20,21 +20,25 @@
 	Written by: Nikita Petko
 */
 
-import ExecutionContext from './execution_context';
+import IPipelineHandler from './interfaces/pipeline_handler';
+import IExecutionContext from './interfaces/execution_context';
 
 /**
  * A class that represents a pipeline handler.
  * @template TInput The input type of the pipeline.
  * @template TOutput The output type of the pipeline.
  */
-export default class PipelineHandler<TInput, TOutput = TInput> {
-  private _next?: PipelineHandler<TInput, TOutput>;
+export default class PipelineHandler<TInput, TOutput = TInput> implements IPipelineHandler<TInput, TOutput> {
+  /**
+   * @internal This is a private member.
+   */
+  private _next?: IPipelineHandler<TInput, TOutput>;
 
   /**
    * Construct a new instance of the PipelineHandler class.
-   * @param {PipelineHandler<TInput, TOutput>?} next The next pipeline handler.
+   * @param {IPipelineHandler<TInput, TOutput>?} next The next pipeline handler.
    */
-  public constructor(next?: PipelineHandler<TInput, TOutput>) {
+  public constructor(next?: IPipelineHandler<TInput, TOutput>) {
     this._next = next;
   }
 
@@ -42,23 +46,23 @@ export default class PipelineHandler<TInput, TOutput = TInput> {
    * Get the next pipeline handler.
    * @returns {PipelineHandler<TInput, TOutput>} The next pipeline handler.
    */
-  public get nextHandler(): PipelineHandler<TInput, TOutput> | undefined {
+  public get nextHandler(): IPipelineHandler<TInput, TOutput> | undefined {
     return this._next;
   }
 
   /**
    * Set the next pipeline handler.
-   * @param {PipelineHandler<TInput, TOutput>?} next The next pipeline handler.
+   * @param {IPipelineHandler<TInput, TOutput>?} next The next pipeline handler.
    */
-  public set nextHandler(next: PipelineHandler<TInput, TOutput> | undefined) {
+  public set nextHandler(next: IPipelineHandler<TInput, TOutput>) {
     this._next = next;
   }
 
   /**
    * Invoke the pipeline handler.
-   * @param {ExecutionContext<TInput, TOutput>} context The execution context of the pipeline.
+   * @param {IExecutionContext<TInput, TOutput>} context The execution context of the pipeline.
    */
-  public invoke(context: ExecutionContext<TInput, TOutput>): void {
+  public invoke(context: IExecutionContext<TInput, TOutput>): void {
     if (context === undefined) {
       throw new Error('The context parameter is undefined.');
     }
@@ -68,10 +72,10 @@ export default class PipelineHandler<TInput, TOutput = TInput> {
 
   /**
    * Invoke the pipeline handler asynchronously.
-   * @param {ExecutionContext<TInput, TOutput>} context The execution context of the pipeline.
+   * @param {IExecutionContext<TInput, TOutput>} context The execution context of the pipeline.
    * @returns {Promise<void>} A promise that represents the asynchronous operation.
    */
-  public async invokeAsync(context: ExecutionContext<TInput, TOutput>): Promise<void> {
+  public async invokeAsync(context: IExecutionContext<TInput, TOutput>): Promise<void> {
     if (context === undefined) {
       throw new Error('The context parameter is undefined.');
     }

@@ -20,16 +20,20 @@
 	Written by: Nikita Petko
 */
 
-import PipelineHandler from './pipeline_handler';
 import ExecutionContext from './execution_context';
+import IExecutionPlan from './interfaces/execution_plan';
+import IPipelineHandler from './interfaces/pipeline_handler';
 
 /**
  * A class that represents the execution plan of a pipeline.
  * @template TInput The input type of the pipeline.
  * @template TOutput The output type of the pipeline.
  */
-export default class ExecutionPlan<TInput, TOutput = TInput> {
-  private _handlers: PipelineHandler<TInput, TOutput>[];
+export default class ExecutionPlan<TInput, TOutput = TInput> implements IExecutionPlan<TInput, TOutput> {
+  /**
+   * @internal This is a private member.
+   */
+  private _handlers: IPipelineHandler<TInput, TOutput>[];
 
   /**
    * Construct a new instance of the ExecutionPlan class.
@@ -40,9 +44,9 @@ export default class ExecutionPlan<TInput, TOutput = TInput> {
 
   /**
    * Get the handlers of the pipeline.
-   * @returns {PipelineHandler<TInput, TOutput>[]} The handlers of the pipeline.
+   * @returns {IPipelineHandler<TInput, TOutput>[]} The handlers of the pipeline.
    */
-  public get handlers(): PipelineHandler<TInput, TOutput>[] {
+  public get handlers(): IPipelineHandler<TInput, TOutput>[] {
     return this._handlers;
   }
 
@@ -68,9 +72,9 @@ export default class ExecutionPlan<TInput, TOutput = TInput> {
 
   /**
    * Remove the specified handler.
-   * @param {PipelineHandler<TInput, TOutput>} handler The handler to remove.
+   * @param {IPipelineHandler<TInput, TOutput>} handler The handler to remove.
    */
-  public removeHandler(handler: PipelineHandler<TInput, TOutput>): void {
+  public removeHandler(handler: IPipelineHandler<TInput, TOutput>): void {
     const index = this._handlers.indexOf(handler);
 
     if (index === -1) {
@@ -82,9 +86,9 @@ export default class ExecutionPlan<TInput, TOutput = TInput> {
 
   /**
    * Append a handler to the pipeline.
-   * @param {PipelineHandler<TInput, TOutput>} handler The handler to append.
+   * @param {IPipelineHandler<TInput, TOutput>} handler The handler to append.
    */
-  public appendHandler(handler: PipelineHandler<TInput, TOutput>): void {
+  public appendHandler(handler: IPipelineHandler<TInput, TOutput>): void {
     if (handler === undefined || handler === null) {
       throw new Error('Handler cannot be null or undefined.');
     }
@@ -94,9 +98,9 @@ export default class ExecutionPlan<TInput, TOutput = TInput> {
 
   /**
    * Prepend a handler to the pipeline.
-   * @param {PipelineHandler<TInput, TOutput>} handler The handler to prepend.
+   * @param {IPipelineHandler<TInput, TOutput>} handler The handler to prepend.
    */
-  public prependHandler(handler: PipelineHandler<TInput, TOutput>): void {
+  public prependHandler(handler: IPipelineHandler<TInput, TOutput>): void {
     if (handler === undefined || handler === null) {
       throw new Error('Handler cannot be null or undefined.');
     }
@@ -106,12 +110,12 @@ export default class ExecutionPlan<TInput, TOutput = TInput> {
 
   /**
    * Add a handler after the specified handler.
-   * @param {PipelineHandler<TInput, TOutput>} handler The handler to add after.
-   * @param {PipelineHandler<TInput, TOutput>} newHandler The handler to add.
+   * @param {IPipelineHandler<TInput, TOutput>} handler The handler to add after.
+   * @param {IPipelineHandler<TInput, TOutput>} newHandler The handler to add.
    */
   public addHandlerAfter(
-    handler: PipelineHandler<TInput, TOutput>,
-    newHandler: PipelineHandler<TInput, TOutput>,
+    handler: IPipelineHandler<TInput, TOutput>,
+    newHandler: IPipelineHandler<TInput, TOutput>,
   ): void {
     if (handler === undefined || handler === null) {
       throw new Error('Handler cannot be null or undefined.');
@@ -132,12 +136,12 @@ export default class ExecutionPlan<TInput, TOutput = TInput> {
 
   /**
    * Add a handler before the specified handler.
-   * @param {PipelineHandler<TInput, TOutput>} handler The handler to add before.
-   * @param {PipelineHandler<TInput, TOutput>} newHandler The handler to add.
+   * @param {IPipelineHandler<TInput, TOutput>} handler The handler to add before.
+   * @param {IPipelineHandler<TInput, TOutput>} newHandler The handler to add.
    */
   public addHandlerBefore(
-    handler: PipelineHandler<TInput, TOutput>,
-    newHandler: PipelineHandler<TInput, TOutput>,
+    handler: IPipelineHandler<TInput, TOutput>,
+    newHandler: IPipelineHandler<TInput, TOutput>,
   ): void {
     if (handler === undefined || handler === null) {
       throw new Error('Handler cannot be null or undefined.');
@@ -159,9 +163,9 @@ export default class ExecutionPlan<TInput, TOutput = TInput> {
   /**
    * Insert a handler at the specified index.
    * @param {number} index The index to insert the handler at.
-   * @param {PipelineHandler<TInput, TOutput>} handler The handler to insert.
+   * @param {IPipelineHandler<TInput, TOutput>} handler The handler to insert.
    */
-  public insertHandlerAt(index: number, handler: PipelineHandler<TInput, TOutput>): void {
+  public insertHandlerAt(index: number, handler: IPipelineHandler<TInput, TOutput>): void {
     if (index < 0 || index > this._handlers.length) {
       throw new Error('Index does not exist in handlers.');
     }
