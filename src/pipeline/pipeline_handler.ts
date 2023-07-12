@@ -28,7 +28,7 @@ import IExecutionContext from './interfaces/execution_context';
  * @template TInput The input type of the pipeline.
  * @template TOutput The output type of the pipeline.
  */
-export default class PipelineHandler<TInput, TOutput = TInput> implements IPipelineHandler<TInput, TOutput> {
+export default class PipelineHandler<TInput = unknown, TOutput = TInput> implements IPipelineHandler<TInput, TOutput> {
   /**
    * @internal This is a private member.
    */

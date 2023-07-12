@@ -29,7 +29,7 @@ import IExecutionContext from './execution_context';
  * @template TInput The input type of the pipeline.
  * @template TOutput The output type of the pipeline.
  */
-export default interface IPipelineHandler<TInput, TOutput = TInput> {
+export default interface IPipelineHandler<TInput = unknown, TOutput = TInput> {
   /**
    * The next handler in the pipeline.
    * @returns {IPipelineHandler<TInput, TOutput>} The next handler in the pipeline.

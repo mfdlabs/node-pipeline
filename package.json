@@ -1,6 +1,6 @@
 {
   "name": "@mfdlabs/pipeline",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A Node.js package that implements @fx-dev/pipeline",
   "main": "lib/index.js",
   "types": "lib/types",

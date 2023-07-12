@@ -68,17 +68,19 @@ export default interface IExecutionPlan<TInput, TOutput = TInput> {
 
   /**
    * Add a handler after the specified handler.
-   * @param {IPipelineHandler<TInput, TOutput>} handler The handler to add after.
+   * @template THandler The type of the handler to add after.
+   * @param {THandler} handler The handler to add after.
    * @param {IPipelineHandler<TInput, TOutput>} newHandler The handler to add.
    */
-  addHandlerAfter(handler: IPipelineHandler<TInput, TOutput>, newHandler: IPipelineHandler<TInput, TOutput>): void;
+  addHandlerAfter<THandler extends string>(handler: THandler, newHandler: IPipelineHandler<TInput, TOutput>): void;
 
   /**
    * Add a handler before the specified handler.
-   * @param {IPipelineHandler<TInput, TOutput>} handler The handler to add before.
+   * @template THandler The type of the handler to add before.
+   * @param {THandler} handler The handler to add before.
    * @param {IPipelineHandler<TInput, TOutput>} newHandler The handler to add.
    */
-  addHandlerBefore(handler: IPipelineHandler<TInput, TOutput>, newHandler: IPipelineHandler<TInput, TOutput>): void;
+  addHandlerBefore<THandler extends string>(handler: THandler, newHandler: IPipelineHandler<TInput, TOutput>): void;
 
   /**
    * Insert a handler at the specified index.

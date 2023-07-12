@@ -29,11 +29,23 @@ import IPipelineHandler from './interfaces/pipeline_handler';
  * @template TInput The input type of the pipeline.
  * @template TOutput The output type of the pipeline.
  */
-export default class ExecutionPlan<TInput, TOutput = TInput> implements IExecutionPlan<TInput, TOutput> {
+export default class ExecutionPlan<TInput = unknown, TOutput = TInput> implements IExecutionPlan<TInput, TOutput> {
   /**
    * @internal This is a private member.
    */
   private _handlers: IPipelineHandler<TInput, TOutput>[];
+
+  /**
+   * @template THandler The type of the handler to find.
+   * @param {THandler} handler The handler to find.
+   * @returns {number} The index of the handler.
+   * @internal This is a private member.
+   */
+  private _findHandlerIndex<THandler extends string>(
+    handler: THandler,
+  ): number {
+    return this._handlers.findIndex((value) => value.constructor.name === handler);
+  }
 
   /**
    * Construct a new instance of the ExecutionPlan class.
@@ -110,11 +122,12 @@ export default class ExecutionPlan<TInput, TOutput = TInput> implements IExecuti
 
   /**
    * Add a handler after the specified handler.
-   * @param {IPipelineHandler<TInput, TOutput>} handler The handler to add after.
+   * @template THandler The type of the handler.
+   * @param {THandler} handler The handler to add after.
    * @param {IPipelineHandler<TInput, TOutput>} newHandler The handler to add.
    */
-  public addHandlerAfter(
-    handler: IPipelineHandler<TInput, TOutput>,
+  public addHandlerAfter<THandler extends string>(
+    handler: THandler,
     newHandler: IPipelineHandler<TInput, TOutput>,
   ): void {
     if (handler === undefined || handler === null) {
@@ -125,7 +138,7 @@ export default class ExecutionPlan<TInput, TOutput = TInput> implements IExecuti
       throw new Error('New handler cannot be null or undefined.');
     }
 
-    const index = this._handlers.indexOf(handler);
+    const index = this._findHandlerIndex(handler);
 
     if (index === -1) {
       throw new Error('Handler does not exist in handlers.');
@@ -136,11 +149,12 @@ export default class ExecutionPlan<TInput, TOutput = TInput> implements IExecuti
 
   /**
    * Add a handler before the specified handler.
-   * @param {IPipelineHandler<TInput, TOutput>} handler The handler to add before.
+   * @template THandler The type of the handler.
+   * @param {THandler} handler The handler to add before.
    * @param {IPipelineHandler<TInput, TOutput>} newHandler The handler to add.
    */
-  public addHandlerBefore(
-    handler: IPipelineHandler<TInput, TOutput>,
+  public addHandlerBefore<THandler extends string>(
+    handler: THandler,
     newHandler: IPipelineHandler<TInput, TOutput>,
   ): void {
     if (handler === undefined || handler === null) {
@@ -151,7 +165,7 @@ export default class ExecutionPlan<TInput, TOutput = TInput> implements IExecuti
       throw new Error('New handler cannot be null or undefined.');
     }
 
-    const index = this._handlers.indexOf(handler);
+    const index = this._findHandlerIndex(handler);
 
     if (index === -1) {
       throw new Error('Handler does not exist in handlers.');

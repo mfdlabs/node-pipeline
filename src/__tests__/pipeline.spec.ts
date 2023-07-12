@@ -26,6 +26,14 @@ import ExecutionPlan from '../pipeline/execution_plan';
 import PipelineHandler from '../pipeline/pipeline_handler';
 import ExecutionContext from '../pipeline/execution_context';
 
+class TestHandler extends PipelineHandler<string, string> {
+  public invoke(context: ExecutionContext<string, string>): void {
+    context.output = context.input;
+
+    super.invoke(context);
+  }
+}
+
 describe('Pipeline', () => {
   describe('ExecutionContext', () => {
     describe('#constructor', () => {
@@ -232,21 +240,21 @@ describe('Pipeline', () => {
     describe('#addHandlerAfter', () => {
       it('should add the specified pipeline handler after the specified handler', () => {
         const plan = new ExecutionPlan();
-        const handler = new PipelineHandler();
+        const handler = new TestHandler();
         const handler2 = new PipelineHandler();
 
         plan.appendHandler(handler);
-        plan.addHandlerAfter(handler, handler2);
+        plan.addHandlerAfter('TestHandler', handler2);
 
         expect(plan.handlerCount).toBe(2);
+        expect(plan.handlers[1]).toBe(handler2);
       });
 
       it('should throw if the handler is undefined or null', () => {
         const plan = new ExecutionPlan();
-        const handler = new PipelineHandler();
 
-        expect(() => plan.addHandlerAfter(handler, undefined as any)).toThrow();
-        expect(() => plan.addHandlerAfter(handler, null as any)).toThrow();
+        expect(() => plan.addHandlerAfter('PipelineHandler', undefined as any)).toThrow();
+        expect(() => plan.addHandlerAfter('PipelineHandler', null as any)).toThrow();
       });
 
       it('should throw if the new handler is undefined or null', () => {
@@ -259,31 +267,30 @@ describe('Pipeline', () => {
 
       it('should throw if the handler is not found', () => {
         const plan = new ExecutionPlan();
-        const handler = new PipelineHandler();
         const handler2 = new PipelineHandler();
 
-        expect(() => plan.addHandlerAfter(handler, handler2)).toThrow();
+        expect(() => plan.addHandlerAfter('PipelineHandler', handler2)).toThrow();
       });
     });
 
     describe('#addHandlerBefore', () => {
       it('should add the specified pipeline handler before the specified handler', () => {
         const plan = new ExecutionPlan();
-        const handler = new PipelineHandler();
+        const handler = new TestHandler();
         const handler2 = new PipelineHandler();
 
         plan.appendHandler(handler);
-        plan.addHandlerBefore(handler, handler2);
+        plan.addHandlerBefore('TestHandler', handler2);
 
         expect(plan.handlerCount).toBe(2);
+        expect(plan.handlers[0]).toBe(handler2);
       });
 
       it('should throw if the handler is undefined or null', () => {
         const plan = new ExecutionPlan();
-        const handler = new PipelineHandler();
 
-        expect(() => plan.addHandlerBefore(handler, undefined as any)).toThrow();
-        expect(() => plan.addHandlerBefore(handler, null as any)).toThrow();
+        expect(() => plan.addHandlerBefore('PipelineHandler', undefined as any)).toThrow();
+        expect(() => plan.addHandlerBefore('PipelineHandler', null as any)).toThrow();
       });
 
       it('should throw if the new handler is undefined or null', () => {
@@ -296,10 +303,9 @@ describe('Pipeline', () => {
 
       it('should throw if the handler is not found', () => {
         const plan = new ExecutionPlan();
-        const handler = new PipelineHandler();
         const handler2 = new PipelineHandler();
 
-        expect(() => plan.addHandlerBefore(handler, handler2)).toThrow();
+        expect(() => plan.addHandlerBefore('PipelineHandler', handler2)).toThrow();
       });
     });
 
